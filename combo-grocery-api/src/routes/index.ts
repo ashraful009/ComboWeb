@@ -1,0 +1,34 @@
+import { Router } from 'express';
+import { authRouter } from './auth.routes';
+import { categoryRouter } from './category.routes';
+import { itemRouter } from './item.routes';
+import { comboRouter } from './combo.routes';
+import { discountRouter } from './discount.routes';
+import { cartRouter } from './cart.routes';
+import { deliveryRouter } from './delivery.routes';
+import { couponRouter } from './coupon.routes';
+import { orderRouter } from './order.routes';
+import { investmentRouter } from './investment.routes';
+import reviewRoutes from './review.routes';
+import { walletRouter } from './wallet.routes';
+import adminRoutes from './admin.routes';
+import { userRouter } from './user.routes';
+import { uploadRouter } from './upload.routes';
+
+export const apiRouter = Router();
+
+apiRouter.use('/upload', uploadRouter);
+apiRouter.use('/admin', adminRoutes);
+apiRouter.use('/auth', authRouter);
+apiRouter.use('/user', userRouter);
+apiRouter.use('/categories', categoryRouter);
+apiRouter.use('/admin/items', itemRouter);
+apiRouter.use('/combos', comboRouter);
+apiRouter.use('/discounts', discountRouter);
+apiRouter.use('/cart', cartRouter);
+apiRouter.use('/delivery', deliveryRouter);
+apiRouter.use('/coupons', couponRouter);
+apiRouter.use('/combos/:comboId/reviews', reviewRoutes);
+apiRouter.use('/orders', orderRouter);
+apiRouter.use('/investments', investmentRouter);
+apiRouter.use('/wallet', walletRouter);

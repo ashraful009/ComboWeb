@@ -1,0 +1,116 @@
+.address-book-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-main-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.address-detail-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.address-detail-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.default-card {
+  border: 2px solid var(--primary-green);
+}
+
+.card-top {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.tag-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.address-tag {
+  font-size: 15px;
+  color: var(--text-gray);
+}
+
+.address-tag strong {
+  color: var(--text-dark);
+}
+
+.default-badge {
+  background-color: var(--primary-green);
+  color: var(--white);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.address-content {
+  flex-grow: 1;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.info-label {
+  width: 110px;
+  color: var(--text-gray);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.info-value {
+  color: var(--text-dark);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.zone-text {
+  color: #b45309; /* gold-ish */
+  font-weight: 600;
+}
+
+.mt-2 {
+  margin-top: 12px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+@media (max-width: 800px) {
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+}
