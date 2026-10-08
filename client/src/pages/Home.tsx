@@ -8,6 +8,7 @@ import { Combo } from '@freshagro/shared';
 import { GlassCard } from '../components/GlassCard';
 import { Button } from '../components/Button';
 import { useNavigate } from 'react-router-dom';
+import bannerImage from '../assets/banner.png';
 
 export const Home: React.FC = () => {
   const { t, pickField } = useLanguage();
@@ -28,14 +29,12 @@ export const Home: React.FC = () => {
   return (
     <div className="pb-20">
       {/* Hero Section */}
-      <section className="relative w-full aspect-[9/12] md:aspect-[9/3] bg-gradient-to-br from-green-50 to-blue-50 overflow-hidden">
-        {settings?.hero_image_url && (
-          <img 
-            src={settings.hero_image_url} 
-            alt="Hero banner" 
-            className="absolute inset-0 w-full h-full object-cover opacity-90"
-          />
-        )}
+      <section className="relative w-full aspect-[9/3] bg-gradient-to-br from-green-50 to-blue-50 overflow-hidden">
+        <img 
+          src={bannerImage} 
+          alt="Hero banner" 
+          className="absolute inset-0 w-full h-full object-cover opacity-90"
+        />
         
         <div className="absolute inset-0 bg-black/20 flex flex-col justify-center">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,8 +76,8 @@ export const Home: React.FC = () => {
         </div>
 
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map(i => (
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            {[1, 2, 3, 4].map(i => (
               <GlassCard key={i} className="h-[500px] animate-pulse bg-white/50" />
             ))}
           </div>
@@ -97,7 +96,7 @@ export const Home: React.FC = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           {combos?.map(combo => (
             <ComboCard 
               key={combo.id} 
@@ -119,22 +118,24 @@ const ComboCard = ({ combo, onAddToCart, onBuyNow }: { combo: Combo, onAddToCart
   const tag = pickField<string | null>(combo, 'tag');
   
   return (
-    <GlassCard hover className="combo-card flex flex-col overflow-hidden relative border-white">
+    <GlassCard hover className="combo-card flex flex-col md:flex-row overflow-hidden relative border-white h-full">
       {tag && (
         <div className="absolute top-4 right-4 z-10 bg-highlight text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
           {tag}
         </div>
       )}
       
-      <div className="h-56 bg-slate-100 flex items-center justify-center overflow-hidden">
+      {/* Left side: Image (3:4 aspect ratio) */}
+      <div className="w-full md:w-2/5 aspect-[3/4] bg-slate-100 flex items-center justify-center overflow-hidden shrink-0 relative">
         {combo.image_url ? (
-          <img src={combo.image_url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+          <img src={combo.image_url} alt="" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
         ) : (
-          <span className="text-6xl opacity-20">📦</span>
+          <span className="text-6xl opacity-20 relative z-10">📦</span>
         )}
       </div>
 
-      <div className="p-6 flex-1 flex flex-col">
+      {/* Right side: Content */}
+      <div className="w-full md:w-3/5 p-6 flex flex-col flex-1">
         <h3 className="text-2xl font-bold text-slate-800 mb-2">{pickField<string>(combo, 'name')}</h3>
         
         <div className="flex gap-4 text-sm text-slate-500 mb-4 font-medium">
@@ -142,20 +143,33 @@ const ComboCard = ({ combo, onAddToCart, onBuyNow }: { combo: Combo, onAddToCart
           {combo.weight_label && <span>⚖️ {combo.weight_label}</span>}
         </div>
 
-        <div className="flex-1 bg-white/50 rounded-xl p-4 mb-6 border border-slate-100">
-          <ul className="text-sm space-y-1 text-slate-700">
-            {combo.items?.slice(0, 5).map(item => (
-              <li key={item.id} className="flex justify-between">
-                <span>• {pickField<string>(item, 'name')}</span>
-                <span className="text-slate-400">{item.qty_label}</span>
-              </li>
-            ))}
-          </ul>
-          {combo.items && combo.items.length > 5 && (
-            <div className="mt-2 text-primary font-medium text-sm text-center">
-              {t('home.more_items', { n: combo.items.length - 5 })}
-            </div>
-          )}
+        {/* Product List */}
+        <div className="flex-1 bg-white/50 rounded-xl p-4 mb-6 border border-slate-100 overflow-y-auto max-h-[300px]">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-slate-200 text-slate-500">
+                <th className="pb-2 font-medium">{t('common.items')}</th>
+                <th className="pb-2 font-medium text-center">{t('common.qty')}</th>
+                <th className="pb-2 font-medium text-right">{t('common.price')}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100/50">
+              {combo.items?.map(item => (
+                <tr key={item.id} className="text-slate-700">
+                  <td className="py-2 pr-2 font-medium">{pickField<string>(item, 'name')}</td>
+                  <td className="py-2 px-2 text-center whitespace-nowrap text-slate-500 text-xs">{item.qty_label}</td>
+                  <td className="py-2 pl-2 text-right whitespace-nowrap">
+                    <div className="flex flex-col items-end">
+                      <span className="font-semibold text-slate-800">{formatCurrency(item.price)}</span>
+                      {item.market_price > item.price && (
+                        <span className="text-xs text-slate-400 line-through">{formatCurrency(item.market_price)}</span>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div className="mt-auto">
