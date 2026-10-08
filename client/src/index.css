@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-slate-800 antialiased min-h-screen overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-surface backdrop-blur-md border border-white/40 shadow-glass rounded-2xl;
+  }
+  
+  .glass-card-hover {
+    @apply hover:shadow-glass-hover hover:-translate-y-1 transition-all duration-300;
+  }
+
+  .pill-button {
+    @apply rounded-full px-6 py-3 font-semibold transition-all duration-300 shadow-pill hover:shadow-pill-hover hover:-translate-y-0.5 active:translate-y-0 active:shadow-pill;
+  }
+
+  .pill-input {
+    @apply rounded-full px-5 py-3 bg-white/80 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white transition-all w-full;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

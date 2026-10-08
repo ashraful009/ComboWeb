@@ -1,0 +1,75 @@
+### Public Endpoints
+
+# 1. Get Public Settings
+GET http://localhost:3000/api/settings/public
+
+###
+
+# 2. Get Active Combos
+GET http://localhost:3000/api/combos
+
+###
+
+# 3. Get Cart Quote
+POST http://localhost:3000/api/cart/quote
+Content-Type: application/json
+
+{
+  "items": [
+    { "comboId": 1, "quantity": 1 }
+  ],
+  "couponCode": "FRESH100",
+  "deliveryZone": "inside_dhaka"
+}
+
+###
+
+# 4. Create Order
+POST http://localhost:3000/api/orders
+Content-Type: application/json
+
+{
+  "customer_name": "Rahim Uddin",
+  "phone": "01711000000",
+  "division": "Dhaka",
+  "district": "Dhaka",
+  "area": "Mirpur",
+  "address": "House 10, Road 2",
+  "delivery_zone": "inside_dhaka",
+  "payment_method": "cod",
+  "items": [
+    { "comboId": 1, "quantity": 1 }
+  ]
+}
+
+###
+
+# 5. Get Order by Public Token (Replace TOKEN with public_token from previous response)
+GET http://localhost:3000/api/orders/public/TOKEN
+
+### Admin Endpoints
+
+# 1. Admin Login
+# @name adminLogin
+POST http://localhost:3000/api/admin/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+###
+
+# 2. Get Dashboard Stats
+GET http://localhost:3000/api/admin/dashboard
+
+###
+
+# 3. Get All Combos (Includes Inactive)
+GET http://localhost:3000/api/admin/combos
+
+###
+
+# 4. Get Admin Orders
+GET http://localhost:3000/api/admin/orders
