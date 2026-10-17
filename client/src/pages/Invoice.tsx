@@ -125,7 +125,11 @@ export const Invoice: React.FC = () => {
                     <td className="py-4 px-4">
                       <div className="font-bold text-lg text-slate-800">{pickField<string>(item, 'name')}</div>
                       <div className="text-xs text-slate-500 mt-1 line-clamp-2 pr-4 leading-relaxed">
-                        {item.items_snapshot?.map((i: Record<string, unknown>) => `${pickField<string>(i, 'name')} ${i.qtyLabel || i.qty_label}`).join(', ')}
+                        {item.items_snapshot?.map((i: Record<string, unknown>) => {
+                          const itemName = pickField<string>(i, 'name') || (lang === 'bn' ? (i.nameBn || i.name_bn || i.nameEn || i.name_en) : (i.nameEn || i.name_en || i.nameBn || i.name_bn)) || (i.name as string) || '';
+                          const itemQty = (i.qtyLabel || i.qty_label || '') as string;
+                          return `${itemName} ${itemQty}`.trim();
+                        }).filter(Boolean).join(', ')}
                       </div>
                     </td>
                     <td className="py-4 px-4 text-center font-semibold">{formatNumber(item.quantity)}</td>

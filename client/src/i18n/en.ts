@@ -20,6 +20,8 @@ export const en = {
     items: "Items",
     qty: "Qty",
     price: "Price",
+    actual_price: "Actual Price",
+    discounted_price: "Discount Price",
   },
   home: {
     shop_combos: "Shop Combos",
@@ -30,5 +32,8 @@ export const en = {
     more_items: "+{n} more",
     serves: "Serves",
     weight: "Weight",
+    brand_disclaimer: "Most of our products are from popular and trusted brands including Fresh, Teer, ACI Pure, Pusti, Sajeeb, Ifad, Sena. We supply according to current market availability.",
+    payment_trust: "✅ Inspect the products in hand before making payment.",
+    brand_promise: "FreshAgro.Farm — Promise of good products, affordable prices, and reliable service."
   }
 };

@@ -10,7 +10,7 @@ interface LanguageContextType {
   t: (key: string, params?: Record<string, string | number>) => string;
   formatCurrency: (amount: number) => string;
   formatNumber: (num: number) => string;
-  pickField: <T>(obj: Record<string, unknown>, baseKey: string) => T;
+  pickField: <T>(obj: Record<string, unknown> | null | undefined, baseKey: string) => T;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -61,9 +61,27 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return `৳${formatNumber(amount)}`;
   };
 
-  const pickField = <T,>(obj: Record<string, unknown>, baseKey: string): T => {
-    const key = `${baseKey}_${lang}`;
-    return (obj[key] !== undefined ? obj[key] : obj[`${baseKey}_en`]) as T;
+  const pickField = <T,>(obj: Record<string, unknown> | null | undefined, baseKey: string): T => {
+    if (!obj) return '' as T;
+    const langSuffix = lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase(); // 'Bn' or 'En'
+    const snakeKey = `${baseKey}_${lang}`;
+    const camelKey = `${baseKey}${langSuffix}`;
+
+    if (obj[snakeKey] !== undefined && obj[snakeKey] !== null) return obj[snakeKey] as T;
+    if (obj[camelKey] !== undefined && obj[camelKey] !== null) return obj[camelKey] as T;
+
+    const snakeEn = `${baseKey}_en`;
+    const camelEn = `${baseKey}En`;
+    const snakeBn = `${baseKey}_bn`;
+    const camelBn = `${baseKey}Bn`;
+
+    if (obj[snakeEn] !== undefined && obj[snakeEn] !== null) return obj[snakeEn] as T;
+    if (obj[camelEn] !== undefined && obj[camelEn] !== null) return obj[camelEn] as T;
+    if (obj[snakeBn] !== undefined && obj[snakeBn] !== null) return obj[snakeBn] as T;
+    if (obj[camelBn] !== undefined && obj[camelBn] !== null) return obj[camelBn] as T;
+    if (obj[baseKey] !== undefined && obj[baseKey] !== null) return obj[baseKey] as T;
+
+    return '' as T;
   };
 
   return (

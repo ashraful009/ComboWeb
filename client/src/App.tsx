@@ -11,6 +11,7 @@ import { Home } from './pages/Home';
 import { Cart } from './pages/Cart';
 import { Checkout } from './pages/Checkout';
 import { OrderConfirmation } from './pages/OrderConfirmation';
+import { TrackOrder } from './pages/TrackOrder';
 import { Invoice } from './pages/Invoice';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminLogin } from './pages/admin/AdminLogin';
@@ -35,6 +36,7 @@ function App() {
                       <Route path="/" element={<Home />} />
                       <Route path="/cart" element={<Cart />} />
                       <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/track-order" element={<TrackOrder />} />
                     </Route>
                     <Route path="/order/:token" element={<OrderConfirmation />} />
                     <Route path="/invoice/:token" element={<Invoice />} />

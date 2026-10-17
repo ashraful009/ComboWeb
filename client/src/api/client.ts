@@ -19,7 +19,24 @@ export const apiClient = async <T>(endpoint: string, options: RequestInit = {}):
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(url, { ...options, headers });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+  let response: Response;
+  try {
+    response = await fetch(url, { 
+      ...options, 
+      headers, 
+      signal: options.signal || controller.signal 
+    });
+  } catch (err: any) {
+    if (err?.name === 'AbortError') {
+      throw new ApiError('TIMEOUT_ERROR', 'Server response timed out. Please check server or network connection.');
+    }
+    throw new ApiError('NETWORK_ERROR', err?.message || 'Failed to connect to server.');
+  } finally {
+    clearTimeout(timeoutId);
+  }
   
   let data: { success: boolean; data?: unknown; error?: { code: string; message: string; fieldErrors?: Record<string, string> } };
   try {

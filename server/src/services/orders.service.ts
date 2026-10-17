@@ -45,7 +45,10 @@ export const createOrder = async (reqData: CreateOrderRequest): Promise<{ orderN
       const snapshots = comboItems.map(ci => ({
         nameBn: ci.name_bn,
         nameEn: ci.name_en,
+        name_bn: ci.name_bn,
+        name_en: ci.name_en,
         qtyLabel: ci.qty_label,
+        qty_label: ci.qty_label,
         marketPrice: ci.market_price,
         price: ci.price,
       }));
@@ -141,6 +144,29 @@ export const getOrderByToken = async (token: string): Promise<Order | null> => {
   }) as OrderItem);
 
   return order as Order;
+};
+
+export const getOrdersByPhone = async (phone: string) => {
+  let digits = phone.replace(/\D/g, '');
+  if (digits.startsWith('880')) digits = '0' + digits.slice(3);
+  const [orders] = await pool.query<RowDataPacket[]>(
+    `SELECT id, order_no, public_token, order_status, payment_status, payment_method,
+            grand_total, created_at, updated_at
+     FROM orders WHERE phone = ?
+     ORDER BY created_at DESC LIMIT 50`,
+    [digits]
+  );
+  if (orders.length === 0) return [];
+
+  const ids = orders.map(o => o.id);
+  const [items] = await pool.query<RowDataPacket[]>(
+    'SELECT order_id, name_en, name_bn, quantity FROM order_items WHERE order_id IN (?)',
+    [ids]
+  );
+  return orders.map(o => ({
+    ...o,
+    items: items.filter(i => i.order_id === o.id).map(i => ({ name_en: i.name_en, name_bn: i.name_bn, quantity: i.quantity }))
+  }));
 };
 
 // Admin methods

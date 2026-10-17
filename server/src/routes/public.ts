@@ -1,19 +1,35 @@
 import { Router } from 'express';
 import { getSettings } from '../services/settings.service';
 import { getAllCombos } from '../services/combos.service';
-import { createOrder, getOrderByToken } from '../services/orders.service';
+import { createOrder, getOrderByToken, getOrdersByPhone } from '../services/orders.service';
 import { calculatePricing, PricingComboInput } from '../services/pricing';
 import { asyncHandler } from '../utils/asyncHandler';
 import { QuoteRequestSchema, CreateOrderRequestSchema } from '@freshagro/shared';
 import { validateBody } from '../middleware/validate';
 import { getCouponByCode } from '../services/coupons.service';
+import { pool } from '../config/db';
 import rateLimit from 'express-rate-limit';
 
 const router = Router();
 
+router.get('/health', (req, res) => {
+  res.json({ success: true, message: 'Server is healthy and running!', time: new Date() });
+});
+
+router.get('/db-check', async (req, res) => {
+  try {
+    const [rows]: any = await pool.query('SELECT 1 as connected');
+    const [combos]: any = await pool.query('SELECT COUNT(*) as count FROM combos');
+    res.json({ success: true, db: 'Connected!', combosCount: combos[0]?.count ?? 0 });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message, code: err.code });
+  }
+});
+
 const orderLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
+  validate: { xForwardedForHeader: false },
   message: { success: false, error: { code: 'RATE_LIMIT', message: 'Too many orders created, please try again later.' } }
 });
 
@@ -57,6 +73,22 @@ router.post('/cart/quote', validateBody(QuoteRequestSchema), asyncHandler(async 
 router.post('/orders', orderLimiter, validateBody(CreateOrderRequestSchema), asyncHandler(async (req, res) => {
   const result = await createOrder(req.body);
   res.json({ success: true, data: result });
+}));
+
+const trackLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  validate: { xForwardedForHeader: false },
+  message: { success: false, error: { code: 'RATE_LIMIT', message: 'Too many requests, please try again later.' } }
+});
+
+router.get('/orders/track', trackLimiter, asyncHandler(async (req, res) => {
+  const phone = String(req.query.phone || '');
+  if (!/^(\+?88)?01[3-9]\d{8}$/.test(phone.replace(/[\s-]/g, ''))) {
+    return res.status(400).json({ success: false, error: { code: 'INVALID_PHONE', message: 'Invalid Bangladeshi mobile number' } });
+  }
+  const orders = await getOrdersByPhone(phone);
+  res.json({ success: true, data: orders });
 }));
 
 router.get('/orders/public/:token', asyncHandler(async (req, res) => {

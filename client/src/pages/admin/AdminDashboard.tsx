@@ -5,6 +5,7 @@ import { Combo, Order } from '@freshagro/shared';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { TrendingUp, ShoppingBag, DollarSign, Package } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface DashboardStats {
   todayOrders: number;
@@ -16,6 +17,7 @@ interface DashboardStats {
 }
 
 export const AdminDashboard: React.FC = () => {
+  const { formatCurrency } = useLanguage();
   const { data: stats, loading, error, refetch } = useFetch<DashboardStats>('/admin/stats');
 
   const toggleComboStatus = async (id: number, isActive: boolean) => {

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-slate-800 antialiased min-h-screen overflow-x-hidden;
   }

@@ -213,7 +213,13 @@ export const AdminOrders: React.FC = () => {
                       <tr key={item.id}>
                         <td className="py-2">
                           <div className="font-bold">{pickField<string>(item, 'name')}</div>
-                          <div className="text-xs text-slate-500 line-clamp-1">{item.items_snapshot?.map((i: Record<string, unknown>) => `${pickField<string>(i, 'name')} ${i.qtyLabel || i.qty_label}`).join(', ')}</div>
+                          <div className="text-xs text-slate-500 line-clamp-1">
+                            {item.items_snapshot?.map((i: Record<string, unknown>) => {
+                              const itemName = pickField<string>(i, 'name') || (i.nameEn || i.name_en || i.nameBn || i.name_bn || i.name || '') as string;
+                              const itemQty = (i.qtyLabel || i.qty_label || '') as string;
+                              return `${itemName} ${itemQty}`.trim();
+                            }).filter(Boolean).join(', ')}
+                          </div>
                         </td>
                         <td className="py-2 text-center">x{item.quantity}</td>
                         <td className="py-2 text-right font-bold">{formatCurrency(item.line_total)}</td>

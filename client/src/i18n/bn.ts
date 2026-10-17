@@ -20,6 +20,8 @@ export const bn = {
     items: "আইটেম",
     qty: "পরিমাণ",
     price: "মূল্য",
+    actual_price: "আসল মূল্য",
+    discounted_price: "ডিসকাউন্ট মূল্য",
   },
   home: {
     shop_combos: "কম্বো কিনুন",
@@ -30,5 +32,8 @@ export const bn = {
     more_items: "আরও {n} টি",
     serves: "উপযোগী",
     weight: "ওজন",
+    brand_disclaimer: "আমাদের অধিকাংশ পণ্যই Fresh, Teer, ACI Pure, Pusti, Sajeeb, Ifad, Sena-সহ দেশের জনপ্রিয় ও বিশ্বস্ত ব্র্যান্ডের। বাজারে বর্তমানে যেসব পণ্য পাওয়া যাচ্ছে, সেগুলোর প্রাপ্যতা অনুযায়ী আমরা সরবরাহ করে থাকি।",
+    payment_trust: "✅ পণ্য হাতে বুঝে পেয়ে তারপর মূল্য পরিশোধ করুন।",
+    brand_promise: "FreshAgro.Farm — ভালো পণ্য, সাশ্রয়ী মূল্য ও নির্ভরযোগ্য সেবার প্রতিশ্রুতি।"
   }
 };

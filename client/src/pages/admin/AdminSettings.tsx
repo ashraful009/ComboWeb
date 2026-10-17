@@ -66,7 +66,7 @@ export const AdminSettings: React.FC = () => {
     setMessage('');
     try {
       await apiClient('/admin/settings', {
-        method: 'PATCH',
+        method: 'PUT',
         body: JSON.stringify(formData)
       });
       setMessage('Settings updated successfully!');

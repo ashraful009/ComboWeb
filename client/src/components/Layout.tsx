@@ -28,7 +28,14 @@ export const Layout: React.FC = () => {
             <a href="/#how-it-works" className="hover:text-primary transition-colors">{t('home.how_it_works')}</a>
             <a href="/#why-us" className="hover:text-primary transition-colors">{t('home.why_us')}</a>
             <a href="#footer" className="hover:text-primary transition-colors">{t('home.contact')}</a>
+            <Link to="/track-order" id="nav-track-order" className="px-4 py-1.5 rounded-full bg-primary text-white text-sm font-semibold hover:opacity-90 transition-opacity">
+              {lang === 'en' ? 'Track Order' : 'অর্ডার ট্র্যাক'}
+            </Link>
           </nav>
+
+          <Link to="/track-order" id="nav-track-order-mobile" className="md:hidden ml-auto mr-2 px-3 py-1 rounded-full bg-primary text-white text-xs font-semibold">
+            {lang === 'en' ? 'Track Order' : 'অর্ডার ট্র্যাক'}
+          </Link>
 
           <div className="flex items-center gap-4">
             <button 
@@ -66,25 +73,25 @@ export const Layout: React.FC = () => {
               <Leaf className="w-6 h-6 text-primary" />
               <span>freshagro.farm</span>
             </div>
-            <p className="opacity-80">Farm-fresh grocery combos delivered directly to your door.</p>
+            <p className="opacity-80">{lang === 'en' ? 'Farm-fresh grocery combos delivered directly to your door.' : 'খামার-তাজা গ্রোসারি কমবো সরাসরি আপনার দরজায়।'}</p>
           </div>
           <div>
             <h3 className="text-white font-semibold text-lg mb-4">{t('home.contact')}</h3>
             {settings && (
               <ul className="space-y-2 opacity-80">
-                <li>Phone: {settings.site_phone}</li>
-                <li>WhatsApp: {settings.site_whatsapp}</li>
-                <li>Email: {settings.site_email}</li>
+                <li>{lang === 'en' ? 'Phone' : 'ফোন'}: {settings.site_phone}</li>
+                <li>{lang === 'en' ? 'WhatsApp' : 'হোয়াটসঅ্যাপ'}: {settings.site_whatsapp}</li>
+                <li>{lang === 'en' ? 'Email' : 'ইমেইল'}: {settings.site_email}</li>
                 <li>{lang === 'en' ? settings.site_address_en : settings.site_address_bn}</li>
               </ul>
             )}
           </div>
           <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Payment Methods</h3>
+            <h3 className="text-white font-semibold text-lg mb-4">{lang === 'en' ? 'Payment Methods' : 'পেমেন্ট পদ্ধতি'}</h3>
             <div className="flex gap-4 opacity-80">
-              <span className="bg-slate-800 px-3 py-1 rounded">bKash</span>
-              <span className="bg-slate-800 px-3 py-1 rounded">Nagad</span>
-              <span className="bg-slate-800 px-3 py-1 rounded">Cash on Delivery</span>
+              <span className="bg-slate-800 px-3 py-1 rounded">{lang === 'en' ? 'bKash' : 'বিকাশ'}</span>
+              <span className="bg-slate-800 px-3 py-1 rounded">{lang === 'en' ? 'Nagad' : 'নগদ'}</span>
+              <span className="bg-slate-800 px-3 py-1 rounded">{lang === 'en' ? 'Cash on Delivery' : 'ক্যাশ অন ডেলিভারি'}</span>
             </div>
           </div>
         </div>
